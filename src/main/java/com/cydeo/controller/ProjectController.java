@@ -53,11 +53,6 @@ public class ProjectController {
         return ResponseEntity.ok(new ResponseWrapper("Project by projectCode: "+projectCode+" has been deleted from DB record",
                 HttpStatus.OK));
 
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseWrapper("User is successfully deleted",
-//                HttpStatus.NO_CONTENT));
-        //204 - HttpStatus.NO_CONTENT
-        //If above way used no body will be returned in Response body
-
     }
 
 

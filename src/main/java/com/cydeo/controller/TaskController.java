@@ -1,0 +1,90 @@
+package com.cydeo.controller;
+
+import com.cydeo.dto.ProjectDTO;
+import com.cydeo.dto.TaskDTO;
+import com.cydeo.entity.ResponseWrapper;
+import com.cydeo.enums.Status;
+import com.cydeo.service.ProjectService;
+import com.cydeo.service.TaskService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/task") //all CREATE, GET, UPDATE, DELETE will be under same end point
+
+public class TaskController {
+
+    private final TaskService taskService;
+
+    public TaskController( TaskService taskService) {
+        this.taskService = taskService;
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseWrapper> getAllTasks(){
+
+        return ResponseEntity.ok(new ResponseWrapper("Task list successfully retrieved from DB",
+                taskService.listAllTasks(), HttpStatus.OK));
+    }
+
+    @GetMapping("/{taskId}")
+    public ResponseEntity<ResponseWrapper> getTaskById(@PathVariable("taskId") Long taskId ){
+
+        return ResponseEntity.ok(new ResponseWrapper("Task by id: "+taskId+" successfully retrieved from DB",
+                taskService.findById(taskId),HttpStatus.OK));
+    }
+
+
+    @PostMapping
+    public ResponseEntity<ResponseWrapper> createTask(@RequestBody TaskDTO taskDTO){
+        taskService.save(taskDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).
+                body(new ResponseWrapper("Task is successfully created",
+                        HttpStatus.CREATED));
+    }
+
+
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<ResponseWrapper> deleteTask(@PathVariable("taskId") Long taskId){
+        taskService.delete(taskId);
+        return ResponseEntity.ok(new ResponseWrapper("Task by id: "+taskId+" has been deleted from DB record",
+                HttpStatus.OK));
+
+    }
+
+
+    @PutMapping
+    public ResponseEntity<ResponseWrapper> updateTask(@RequestBody TaskDTO taskDTO){
+        taskService.update(taskDTO);
+        return ResponseEntity.ok(new ResponseWrapper("Task is successfully updated", HttpStatus.OK));
+
+    }
+
+    @GetMapping("/employee/pending-tasks")
+    public ResponseEntity<ResponseWrapper> employeePendingTasks(){
+        return ResponseEntity.ok(new ResponseWrapper("Tasks that are OPEN status successfully retrieved",
+                taskService.listAllTasksByStatus(Status.COMPLETE),
+                HttpStatus.OK));
+    }
+
+    @PutMapping("/employee/update-status")
+    public ResponseEntity<ResponseWrapper> employeeUpdateTasks(@RequestBody TaskDTO taskDTO){
+        taskService.updateStatus(taskDTO);
+
+        return ResponseEntity.ok(new ResponseWrapper("Task status successfully updated",
+                HttpStatus.OK));
+    }
+
+    @GetMapping("/employee/archive")
+    public ResponseEntity<ResponseWrapper> employeeArchivedTasks(){
+        return ResponseEntity.ok(new ResponseWrapper("Tasks status are completed successfully retrieved from DB record",
+                taskService.listAllTasksByStatus(Status.COMPLETE),
+                HttpStatus.OK));
+
+    }
+
+
+}
