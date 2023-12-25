@@ -1,10 +1,11 @@
 package com.cydeo.dto;
-
+import lombok.Builder;
 import lombok.Getter;
-import org.springframework.stereotype.Service;
+import lombok.Setter;
 
 @Getter
-@Service
+@Setter
+@Builder
 public class DefaultExceptionMessageDTO {
 
     private String message;
