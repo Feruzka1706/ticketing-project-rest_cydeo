@@ -50,7 +50,7 @@ public class ProjectController {
     @RolesAllowed("Manager")
     public ResponseEntity<ResponseWrapper> updateProject(@RequestBody ProjectDTO projectDTO){
         projectService.update(projectDTO);
-        return ResponseEntity.ok(new ResponseWrapper("User is successfully updated", projectDTO, HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Project is successfully updated", projectDTO, HttpStatus.OK));
     }
 
     @DeleteMapping("/{userName}")
